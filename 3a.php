@@ -1,6 +1,6 @@
 <?php
 
-$input = trim(file_get_contents(__DIR__ . '/input.txt'));
+$input = include 'utils/input.php';
 
 function solve(int $value) : int
 {
