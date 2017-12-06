@@ -1,84 +1,73 @@
 <?php
+declare(strict_types=1);
 
-$input = include 'utils/input.php';
+$input = (int) include 'utils/input.php';
 
-function solve(int $value): int {
-    $x = 2;
-    $y = 2;
-
+function solve(int $puzzle) : int
+{
     $grid = [];
-    for ($i = 0; $i <= (2 * $y); $i++) {
-        $grid[] = [];
-    }
-    $grid[$x][$y] = 1;
-    $width = 1;
+    $x = $y = 0;
+    $right = $up = $left = $down = 0;
+    $stepRight = 1;
+    $stepLeft = 2;
+    $value = 0;
 
-    $calculateGrid = function($grid, $x, $y) {
-        $sum = 0;
+    $neighbors = [
+        [0, 1],
+        [1, 1],
+        [1, 0],
+        [1, -1],
+        [0, -1],
+        [-1, -1],
+        [-1, 0],
+        [-1, 1]
+    ];
 
-        $sum += ($grid[$x - 1][$y] ?? 0);
-        $sum += ($grid[$x - 1][$y + 1] ?? 0);
-        $sum += ($grid[$x - 1][$y - 1] ?? 0);
-        $sum += ($grid[$x][$y + 1] ?? 0);
-        $sum += ($grid[$x][$y - 1] ?? 0);
-        $sum += ($grid[$x + 1][$y] ?? 0);
-        $sum += ($grid[$x + 1][$y - 1] ?? 0);
-        $sum += ($grid[$x + 1][$y + 1] ?? 0);
+    while ($value <= $puzzle) {
+        $value = 0;
 
-        return $sum;
-    };
-
-    while (true) {
-        $width += 2;
-
-        $y++; // right
-        $grid[$x][$y] = $calculateGrid($grid, $x, $y);
-        if ($grid[$x][$y] > $value) {
-            return $grid[$x][$y];
+        if ($x === 0 && $y === 0) {
+            $value = 1;
         }
 
-        // go up (but not too much)
-        for ($i = 0; $i < $width - 2; $i++) {
-            $x--;
-
-            $grid[$x][$y] = $calculateGrid($grid, $x, $y);
-            if ($grid[$x][$y] > $value) {
-                return $grid[$x][$y];
-            }
+        foreach (neighbor($neighbors, $grid, $x, $y) as $i) {
+            $value += $i;
         }
 
-        // go left
-        for ($i = 0; $i < $width - 1; $i++) {
-            $y--;
+        $grid[$y][$x] = $value;
 
-            $grid[$x][$y] = $calculateGrid($grid, $x, $y);
-            if ($grid[$x][$y] > $value) {
-                return $grid[$x][$y];
-            }
-        }
-
-        // go down
-        for ($i = 0; $i < $width - 1; $i++) {
+        if ($right < $stepRight) {
+            $right++;
             $x++;
-
-            $grid[$x][$y] = $calculateGrid($grid, $x, $y);
-            if ($grid[$x][$y] > $value) {
-                return $grid[$x][$y];
-            }
-        }
-
-        // go right
-        for ($i = 0; $i < $width - 1; $i++) {
+        } elseif ($up < $stepRight) {
+            $up++;
             $y++;
-
-            $grid[$x][$y] = $calculateGrid($grid, $x, $y);
-            if ($grid[$x][$y] > $value) {
-                return $grid[$x][$y];
-            }
+        } elseif ($left < $stepLeft) {
+            $left++;
+            $x--;
+        } elseif ($down < $stepLeft) {
+            $down++;
+            $y--;
+        } else {
+            $right = 0;
+            $up = 0;
+            $left = 0;
+            $down = 0;
+            $stepLeft += 2;
+            $stepRight += 2;
         }
     }
 
-    return -1;
+    return $value;
+}
+
+function neighbor(array $neighbors, array $grid, int $x, int $y) : generator
+{
+    foreach ($neighbors as $neighbor) {
+        if (isset($grid[$y + $neighbor[0]][$x + $neighbor[1]])) {
+            yield $grid[$y + $neighbor[0]][$x + $neighbor[1]];
+        }
+    }
 }
 
 echo solve($input) . PHP_EOL;
