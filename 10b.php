@@ -8,8 +8,13 @@ $list = range(0, $size-1);
 $lengths = [];
 $skip = $current = 0;
 
-function solve($input, $lengths, &$list, &$skip, &$current, $size = 256) {
+for ($i = 0; $i < strlen($input); $i++) {
+    $lengths[] = ord($input[$i]);
+}
 
+$lengths = array_merge($lengths, [17, 31, 73, 47, 23]);
+
+for ($i = 0; $i < 64; $i++) {
     foreach ($lengths as $l => $length) {
 
         $temp = $list;
@@ -23,17 +28,6 @@ function solve($input, $lengths, &$list, &$skip, &$current, $size = 256) {
 
         $list = $temp;
     }
-}
-
-
-for ($i = 0; $i < strlen($input); $i++) {
-    $lengths[] = ord($input[$i]);
-}
-
-$lengths = array_merge($lengths, [17, 31, 73, 47, 23]);
-
-for ($i = 0; $i < 64; $i++) {
-    solve($input, $lengths, $list, $skip, $current);
 }
 
 for ($i = 0; $i < 16; $i++) {
