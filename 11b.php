@@ -2,7 +2,6 @@
 
 $input = include 'utils/input.php';
 
-$directions = explode(',', $input);
 $furthest = $x = $y = 0;
 
 $movements = [
@@ -14,7 +13,7 @@ $movements = [
     'se' => [1,-1],
 ];
 
-foreach ($directions as $direction) {
+foreach (explode(',', $input) as $direction) {
     $x += $movements[$direction][0];
     $y += $movements[$direction][1];
 
