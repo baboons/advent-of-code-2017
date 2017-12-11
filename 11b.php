@@ -3,44 +3,24 @@
 $input = include 'utils/input.php';
 
 $directions = explode(',', $input);
+$furthest = $x = $y = 0;
 
-$furthest = $x = $y = $z = 0;
+$movements = [
+    'nw' => [-1,1],
+    'n'  => [0,2],
+    'ne' => [1,1],
+    'sw' => [-1,-1],
+    's'  => [0,-2],
+    'se' => [1,-1],
+];
 
-foreach($directions as $direction) {
-    switch ($direction) {
-        case "n":
-            $x++;
-            $z--;
-            break;
-        case "s":
-            $z++;
-            $x--;
-            break;
-        case "ne":
-            $x++;
-            $y--;
-            break;
-        case "nw":
-            $y++;
-            $z--;
-            break;
-        case "se":
-            $z++;
-            $y--;
-            break;
-        case "sw":
-            $y++;
-            $x--;
-            break;
-    }
+foreach ($directions as $direction) {
+    $x += $movements[$direction][0];
+    $y += $movements[$direction][1];
 
-    if (($distance = distance($x, $y, $z)) > $furthest) {
+    if (($distance = (abs($x) + abs($y)) / 2) > $furthest) {
         $furthest = $distance;
     }
-}
-
-function distance($x, $y, $z) {
-    return (abs($x) + abs($y) + abs($z)) / 2;
 }
 
 echo $furthest . PHP_EOL;
