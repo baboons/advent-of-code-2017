@@ -2,7 +2,7 @@
 
 $input = include 'utils/input.php';
 
-$hashes = [];
+$hashes = $grid = [];
 $regions = 0;
 
 foreach (range(0, 127) as $row => $iteration) {
@@ -13,6 +13,7 @@ foreach (range(0, 127) as $row => $iteration) {
     $lengths = [];
     $skip = $current = 0;
     $key = "$input-$iteration";
+
     for ($i = 0; $i < strlen($key); $i++) {
         $lengths[] = ord($key[$i]);
     }
@@ -38,15 +39,13 @@ foreach (range(0, 127) as $row => $iteration) {
     $binary = '';
 
     for ($i = 0; $i < 16; $i++) {
-
         $value = 0;
 
         for ($j = 0; $j < 16; $j++) {
             $value ^= $list[$i * 16 + $j];
         }
 
-        $bin = str_pad(decbin($value), 8, '0', STR_PAD_LEFT );
-        $binary .= $bin;
+        $binary .= str_pad(decbin($value), 8, '0', STR_PAD_LEFT );;
     }
 
     for ($b = 0; $b < 128; $b++) {
