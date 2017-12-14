@@ -44,7 +44,7 @@ function knotHash(string $input, bool $binary = false): string {
         }
 
         if ($binary) {
-            $hash .= str_pad(decbin($value), 8, '0', STR_PAD_LEFT );;
+            $hash .= str_pad(decbin($value), 8, '0', STR_PAD_LEFT );
         } else {
             $hash .= str_pad(dechex($value), 2, '0');
         }

@@ -3,7 +3,7 @@ include 'utils/functions.php';
 
 $input = include 'utils/input.php';
 
-$hashes = $grid = [];
+$grid = [];
 $regions = 0;
 
 foreach (range(0, 127) as $row => $iteration) {
@@ -26,7 +26,7 @@ foreach (range(0, 127) as $r) {
                 if ($x < 0 || $x >= 128) continue;
                 if ($y < 0 || $y >= 128) continue;
 
-                if($grid[$y][$x] === 1) {
+                if ($grid[$y][$x] === 1) {
                     $grid[$y][$x] = 2;
                     $explore[] = [$x+1, $y];
                     $explore[] = [$x-1, $y];
