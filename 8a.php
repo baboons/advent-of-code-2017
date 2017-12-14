@@ -1,10 +1,9 @@
 <?php
-
-$input = include 'utils/input.php';
+include 'utilities.php';
 
 $register = [];
 
-foreach (explode("\n", $input) as $row) {
+foreach (explode("\n", input()) as $row) {
 
     [$var, $op, $value, $if, $ifVar, $ifOp, $ifValue] = preg_split("/\s+/", $row);
 

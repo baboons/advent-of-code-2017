@@ -1,6 +1,5 @@
 <?php
-
-$input = include 'utils/input.php';
+include 'utilities.php';
 
 $garbage = false;
 $ignore = 1;
@@ -8,7 +7,7 @@ $level = 0;
 $score = 0;
 $characters = 0;
 
-foreach (str_split($input) as $char) {
+foreach (str_split(input()) as $char) {
     $ignore += 1;
 
     if ($ignore >= 2 && $garbage && $char !== '!' && $char !== '>') {

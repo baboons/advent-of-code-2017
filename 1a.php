@@ -1,7 +1,7 @@
 <?php
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-
+$input = input();
 $sum = 0;
 $length = strlen($input);
 

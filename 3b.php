@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-$input = (int) include 'utils/input.php';
+include 'utilities.php';
+
+$input = (int) input();
 
 function solve(int $puzzle) : int
 {

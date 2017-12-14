@@ -1,8 +1,7 @@
 <?php
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-
-$blocks = preg_split('/\s+/', $input);
+$blocks = preg_split('/\s+/', input());
 $banks = count($blocks);
 $combinations = [];
 $steps = 0;

@@ -1,10 +1,9 @@
 <?php
-
-$input = include 'utils/input.php';
+include 'utilities.php';
 
 $children = $parents = [];
 
-preg_match_all('/([a-z]+)\s\((\d+)\)(?:\s->\s(.*))?/', $input, $matches);
+preg_match_all('/([a-z]+)\s\((\d+)\)(?:\s->\s(.*))?/', input(), $matches);
 
 [$text, $programs, $weights, $sub] = $matches;
 

@@ -1,11 +1,10 @@
 <?php
-
-$input = include 'utils/input.php';
+include 'utilities.php';
 
 $seen = [0];
 $programs = [];
 
-foreach (explode("\n", $input) as $row) {
+foreach (explode("\n", input()) as $row) {
     [$id, $parts] = explode(" <-> ", $row);
     $programs[$id] = explode(', ', $parts);
 }

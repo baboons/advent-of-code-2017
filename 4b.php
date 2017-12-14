@@ -1,7 +1,7 @@
 <?php
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-$rows = explode("\n", $input);
+$rows = explode("\n", input());
 
 $count = 0;
 

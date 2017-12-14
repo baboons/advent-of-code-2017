@@ -1,8 +1,7 @@
 <?php
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-$rows = explode("\n", $input);
-
+$rows = explode("\n", input());
 $checksum = 0;
 
 foreach ($rows as $row) {

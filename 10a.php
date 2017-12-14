@@ -1,10 +1,9 @@
 <?php
-
-$input = include 'utils/input.php';
+include 'utilities.php';
 
 $size = 256;
 
-$lengths = explode(',', $input);
+$lengths = explode(',', input());
 $skip = $current = 0;
 $list = range(0, $size-1);
 

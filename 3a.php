@@ -1,7 +1,7 @@
 <?php
+include 'utilities.php';
 
-$input = (int) include 'utils/input.php';
-
+$input = (int) input();
 $counter = 1;
 $turns = 0;
 $x = 0;

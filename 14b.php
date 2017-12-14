@@ -1,8 +1,7 @@
 <?php
-include 'utils/functions.php';
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-
+$input = input();
 $grid = [];
 $regions = 0;
 

@@ -1,10 +1,9 @@
 <?php
-
-$input = include 'utils/input.php';
+include 'utilities.php';
 
 $firewall = $depths = [];
 
-foreach (explode("\n", $input) as $row) {
+foreach (explode("\n", input()) as $row) {
     [$layer, $depth] = explode(": ", $row);
 
     $firewall[$layer] = $depth === 1 ? 1 : ($depth - 1) * 2;

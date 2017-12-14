@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-$input = include 'utils/input.php';
+include 'utilities.php';
+
+$input = input();
 
 function getMatches(string $input): array
 {

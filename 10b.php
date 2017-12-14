@@ -1,6 +1,4 @@
 <?php
-include 'utils/functions.php';
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-
-echo knotHash($input) . PHP_EOL;
+echo knotHash(input()) . PHP_EOL;

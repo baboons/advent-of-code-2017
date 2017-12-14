@@ -1,10 +1,8 @@
 <?php
+include 'utilities.php';
 
-$input = include 'utils/input.php';
-$rows = explode("\n", $input);
-
-$steps = 0;
-$i = 0;
+$rows = explode("\n", input());
+$steps = $i = 0;
 
 while ($i < count($rows)) {
 
