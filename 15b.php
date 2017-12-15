@@ -1,45 +1,33 @@
 <?php
 include 'utilities.php';
 
-define('MILLION',   1000 * 1000);
-define('FACTOR_A',  16807);
-define('FACTOR_B',  48271);
-define('DIV',       2147483647);
-
 preg_match_all("#\d+#", input(), $matches);
 
 [$a, $b] = current($matches);
 
 $count = $sum = 0;
-$binaryA = $binaryB = false;
 
-while($count < 5 * MILLION) {
+while ($count < 5000000) {
 
-    if (!$binaryA) {
-        $a = $a * FACTOR_A % DIV;
-
+    while (true) {
+        $a = $a * 16807 % 2147483647;
         if ($a % 4 === 0) {
-            $binaryA = str_pad(substr(decbin($a), -16), 16, 0, STR_PAD_LEFT);
+            break;
         }
+    }
 
-    } elseif (!$binaryB) {
-        $b = $b * FACTOR_B % DIV;
-
+    while (true) {
+        $b = $b * 48271 % 2147483647;
         if ($b % 8 === 0) {
-            $binaryB = str_pad(substr(decbin($b), -16), 16, 0, STR_PAD_LEFT);
+            break;
         }
     }
 
-    if($binaryA && $binaryB) {
-        $count++;
-
-        if($binaryA === $binaryB) {
-            $sum++;
-        }
-
-        $binaryA = false;
-        $binaryB = false;
+    if (($a & 0xffff) === ($b & 0xffff)) {
+        $sum++;
     }
+
+    $count++;
 }
 
 echo $sum . PHP_EOL;
