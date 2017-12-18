@@ -1,80 +1,67 @@
 <?php
 include 'utilities.php';
 
-define("A", 1);
-define("B", 2);
+preg_match_all("#^(\w{3})\s+(\w)(:?.*)$#m", input(), $program);
 
-$program = array_map(function ($line) {
-
-    $values = preg_split('/\s+/', trim($line));
-
-    if (count($values) === 3) {
-        [$op, $target, $value] = $values;
-    } else {
-        [$op, $target] = $values;
-    }
-
-    return [
-        'op' => $op,
-        'target' => $target,
-        'value' => (isset($value) ? $value : false)
-    ];
-
-}, explode("\n", input()));
+define('A', 1);
+define('B', 2);
+define('LINES', count($program[0]));
+define('STATE', [
+    'terminated' => false,
+    'waiting' => false,
+    'queue' => [],
+    'sent' => 0,
+    'cursor' => 0
+]);
 
 $process = A;
 $done = false;
-$lines = count($program);
 
 $states = [
-    A => [
-        'terminated' => false,
-        'waiting' => false,
-        'registers' => ['p' => 0],
-        'queue' => [],
-        'sent' => 0,
-        'cursor' => 0
-    ],
-    B => [
-        'terminated' => false,
-        'waiting' => false,
-        'registers' => ['p' => 1],
-        'queue' => [],
-        'sent' => 0,
-        'cursor' => 0
-    ]
+    A => STATE + ['register' => ['p' => 0]],
+    B => STATE + ['register' => ['p' => 1]]
 ];
 
 while (!$done) {
+
     $state =& $states[$process];
 
     if (!$state['terminated']) {
 
         $cursor =& $state['cursor'];
-        $registers =& $state['registers'];
+        $registers =& $state['register'];
         $queue =& $state['queue'];
         $sent =& $state['sent'];
-        $step = $program[$cursor];
-        $target = $step['target'];
-        $value = $step['value'];
+
+        $op = $program[1][$cursor];
+        $target = $program[2][$cursor];
+        $value = trim($program[3][$cursor]);
 
         $state['waiting'] = false;
 
-        switch ($step['op']) {
+        if(!isset($registers[$target])) {
+            $registers[$target] = 0;
+        }
+
+        if (!empty($value)) {
+            $value = is_numeric($value) ? (int) $value : (int) $registers[$value];
+        }
+
+        switch ($op) {
             case 'set':
-                $registers[$target] = getValue($process, $value);
+                $registers[$target] = $value;
                 break;
             case 'add':
-                $registers[$target] = getValue($process, $target) + getValue($process, $value);
+                $registers[$target] += $value;
                 break;
             case 'mul':
-                $registers[$target] = getValue($process, $target) * getValue($process, $value);
+                $registers[$target] *= $value;
                 break;
             case 'mod':
-                $registers[$target] = getValue($process, $target) % getValue($process, $value);
+                $registers[$target] %= $value;
                 break;
             case 'snd':
-                $queue[] = getValue($process, $target);
+                $queue[] = $registers[$target];
                 $sent++;
                 break;
             case 'rcv':
@@ -86,8 +73,9 @@ while (!$done) {
                 }
                 break;
             case 'jgz':
-                if (getValue($process, $target) > 0) {
-                    $cursor += getValue($process, $value) - 1;
+                $target = is_numeric($target) ? (int) $target : (int) $registers[$target];
+                if ($target > 0) {
+                    $cursor += $value - 1;
                 }
                 break;
         }
@@ -96,7 +84,7 @@ while (!$done) {
             $cursor++;
         }
 
-        if ($cursor < 0 || $cursor >= $lines) {
+        if ($cursor < 0 || $cursor >= LINES) {
             $state['terminated'] = true;
         }
     }
@@ -105,25 +93,6 @@ while (!$done) {
 
     $done = ($states[A]['terminated'] || $states[A]['waiting']) &&
             ($states[B]['terminated'] || $states[B]['waiting']);
-}
-
-function getValue(int $process, string $target): string
-{
-    global $states;
-
-    if (is_numeric($target)) {
-        return (int) $target;
-    }
-
-    $registers =& $states[$process]['registers'];
-
-    if (!array_key_exists($target, $registers)) {
-        $registers[$target] = 0;
-    }
-
-    $value = $registers[$target];
-
-    return $value;
 }
 
 echo $states[B]['sent'] . PHP_EOL;
