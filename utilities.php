@@ -207,3 +207,55 @@ function array2rule(array $array): string
         return implode('', $parts);
     }, $array));
 }
+
+/**
+ * @param array $components
+ * @param array $bridge
+ * @return array
+ */
+function findStrongestBridge(array $components, array $bridge): array
+{
+    $last = end($bridge);
+    $bridges = [
+        count($bridge) => array_sum($bridge),
+    ];
+    foreach ($components as $index => $component) {
+        if ($component[0] === $last) {
+            $new = $components;
+            unset($new[$index]);
+            $bridges = mergeBridges($bridges, findStrongestBridge($new, array_merge($bridge, [
+                $component[0],
+                $component[1],
+            ])));
+        } elseif ($component[1] === $last) {
+            $new = $components;
+            unset($new[$index]);
+            $bridges = mergeBridges($bridges, findStrongestBridge($new, array_merge($bridge, [
+                $component[1],
+                $component[0],
+            ])));
+        }
+    }
+
+    return $bridges;
+}
+
+/**
+ * @param array $bridges
+ * @param array $available
+ * @return array
+ */
+function mergeBridges(array $bridges, array $available): array
+{
+    foreach ($available as $count => $strength) {
+        if (false === array_key_exists($count, $bridges)) {
+            $bridges[$count] = $strength;
+            continue;
+        }
+        if ($bridges[$count] < $available[$count]) {
+            $bridges[$count] = $available[$count];
+        }
+    }
+
+    return $bridges;
+}
